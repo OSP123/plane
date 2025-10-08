@@ -220,6 +220,62 @@ def track_state(
                 epoch=epoch,
             )
         )
+        
+        # Handle gamification when issue is completed
+        if new_state and new_state.group == "completed":
+            try:
+                from plane.utils.gamification import update_user_gamification
+                from plane.db.models import Issue, Profile
+                
+                # Get the issue to extract completion details
+                issue = Issue.objects.get(id=issue_id)
+                
+                # Get the user's profile (assuming the actor is the one who completed it)
+                try:
+                    user_profile = Profile.objects.get(user_id=actor_id)
+                    
+                    # Extract issue details for scoring
+                    priority = issue.priority or "none"
+                    estimate_point_key = None
+                    if issue.estimate_point:
+                        estimate_point_key = issue.estimate_point.key
+                    
+                    # Update gamification score
+                    gamification_result = update_user_gamification(
+                        user_profile=user_profile,
+                        task_score=1.0,  # Base score, calculation happens in the function
+                        task_priority=priority,
+                        estimate_point_key=estimate_point_key
+                    )
+                    
+                    # Log gamification activity if rank changed
+                    if gamification_result.get("rank_changed"):
+                        issue_activities.append(
+                            IssueActivity(
+                                issue_id=issue_id,
+                                actor_id=actor_id,
+                                verb="achieved",
+                                old_value=gamification_result.get("old_rank"),
+                                new_value=gamification_result.get("new_rank"),
+                                field="gamification",
+                                project_id=project_id,
+                                workspace_id=workspace_id,
+                                comment=f"earned {gamification_result.get('task_score_earned', 0):.1f} points and achieved rank",
+                                old_identifier=None,
+                                new_identifier=None,
+                                epoch=epoch,
+                            )
+                        )
+                except Profile.DoesNotExist:
+                    # User profile doesn't exist, skip gamification
+                    pass
+                    
+            except Exception as e:
+                # Log the error but don't break the main flow
+                import logging
+                logger = logging.getLogger(__name__)
+                logger.error(f"Gamification error for issue {issue_id}: {str(e)}")
+                pass
 
 
 # Track changes in issue target date

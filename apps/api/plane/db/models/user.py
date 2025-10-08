@@ -216,6 +216,12 @@ class Profile(TimeAuditModel):
 
     # marketing
     has_marketing_email_consent = models.BooleanField(default=False)
+    
+    # gamification - Warhammer 40k themed
+    gamification_score = models.IntegerField(default=0, help_text="Total points earned from completed tasks")
+    gamification_rank = models.CharField(max_length=50, default="Initiate", help_text="Current Warhammer 40k themed rank")
+    tasks_completed = models.IntegerField(default=0, help_text="Total number of tasks completed")
+    last_rank_upgrade = models.DateTimeField(null=True, blank=True, help_text="When the user last upgraded their rank")
 
     class Meta:
         verbose_name = "Profile"

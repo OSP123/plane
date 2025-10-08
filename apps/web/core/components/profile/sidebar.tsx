@@ -19,6 +19,7 @@ import { Loader } from "@plane/ui";
 import { cn, renderFormattedDate, getFileURL } from "@plane/utils";
 // components
 import { Logo } from "@/components/common/logo";
+import { GamificationBadge } from "@/components/gamification/gamification-badge";
 // helpers
 // hooks
 import { useAppTheme } from "@/hooks/store/use-app-theme";
@@ -131,6 +132,9 @@ export const ProfileSidebar: FC<TProfileSidebar> = observer((props) => {
                 {userData?.first_name} {userData?.last_name}
               </h4>
               <h6 className="text-sm text-custom-text-200">({userData?.display_name})</h6>
+              <div className="mt-3">
+                <GamificationBadge />
+              </div>
             </div>
             <div className="mt-6 space-y-5">
               {userDetails.map((detail) => (

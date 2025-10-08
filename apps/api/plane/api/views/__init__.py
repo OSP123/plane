@@ -53,3 +53,9 @@ from .intake import (
 from .asset import UserAssetEndpoint, UserServerAssetEndpoint, GenericAssetEndpoint
 
 from .user import UserEndpoint
+
+from .gamification import (
+    UserGamificationAPIEndpoint,
+    WorkspaceLeaderboardAPIEndpoint,
+    ProjectLeaderboardAPIEndpoint,
+)

@@ -33,6 +33,7 @@ import { ThemeStore, IThemeStore } from "./theme.store";
 import { ITransientStore, TransientStore } from "./transient.store";
 import { IUserStore, UserStore } from "./user";
 import { IWorkspaceRootStore, WorkspaceRootStore } from "./workspace";
+import { GamificationStore, IGamificationStore } from "./gamification/gamification.store";
 
 enableStaticRendering(typeof window === "undefined");
 
@@ -66,6 +67,7 @@ export class CoreRootStore {
   stickyStore: IStickyStore;
   editorAssetStore: IEditorAssetStore;
   workItemFilters: IWorkItemFilterStore;
+  gamification: IGamificationStore;
 
   constructor() {
     this.router = new RouterStore();
@@ -97,6 +99,7 @@ export class CoreRootStore {
     this.editorAssetStore = new EditorAssetStore();
     this.analytics = new AnalyticsStore();
     this.workItemFilters = new WorkItemFilterStore();
+    this.gamification = new GamificationStore();
   }
 
   resetOnSignOut() {
@@ -130,5 +133,6 @@ export class CoreRootStore {
     this.stickyStore = new StickyStore();
     this.editorAssetStore = new EditorAssetStore();
     this.workItemFilters = new WorkItemFilterStore();
+    this.gamification = new GamificationStore();
   }
 }
